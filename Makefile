@@ -1,7 +1,7 @@
 PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 CXX = /usr/local/bin/g++-9
-CPPFLAGS = -fopenmp -O2 -I$(MKL_INC_DIR)
+CPPFLAGS = -fopenmp -O2
 LDFLAGS = -lgomp
 
 MKL_ROOT =  /opt/intel/compilers_and_libraries/mac/mkl
@@ -22,10 +22,10 @@ endif
 all:	BlockJacobi
 
 BlockJacobi:	$(OBJS)
-	$(CXX) $(CPPFLAGS) -o $@ $^
+	$(CXX) -o $@ $^ $(LDFLAGS) -L$(MKL_LIB_DIR) $(MKL_LIBS)
 
 %.o:	$(PROJECT_ROOT)%.cpp
-	$(CXX) -c $(CPPFLAGS) -o $@ $<
+	$(CXX) -c $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -I$(MKL_INC_DIR) -o $@ $<
 
 clean:
 	rm -fr BlockJacobi $(OBJS)
