@@ -1,0 +1,87 @@
+#include <omp.h>
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <cmath>
+
+using namespace std;
+
+// Generate random matrix
+void Gen_mat(const int m, const int n, double *A)
+{
+	srand(20190611);
+
+//	#pragma omp parallel for
+	for (int i=0; i<m*n; i++)
+		A[i] = 1.0 - 2*(double)rand() / RAND_MAX;
+}
+
+// Copy matrix A to B
+void Copy_mat(const int m, const int n, double *A, double *B)
+{
+//	#pragma omp parallel for
+	#pragma omp for
+	for (int i=0; i<m*n; i++)
+		B[i] = A[i];
+}
+
+// Show matrix
+void Show_mat(const int m, const int n, double *A)
+{
+	cout.setf(ios::scientific);
+	for (int i=0; i<m; i++) {
+		for (int j=0; j<n; j++)
+			cout << showpos << setprecision(4) << A[i + j*m] << ", ";
+		cout << endl;
+	}
+	cout << endl;
+}
+
+// Set the matrix to identity matrix
+void Set_Iden(const int n, double *A) // for square matrix only
+{
+//	#pragma omp parallel for
+	#pragma omp for    
+	for (int i=0; i<n; i++)
+		for (int j=0; j<=i; j++)
+			(i != j) ? A[i + j*n] = A[j + i*n] = 0.0: A[i + j*n] = 1.0;
+}
+
+// Norm of the off-diagonal elements
+double Off_d(const int n, double *A) // for square matrix only
+{
+	double tmp = 0.0;
+
+	#pragma omp parallel for reduction(+:tmp)
+	for (int i=0; i<n; i++)
+		for (int j=0; j<n; j++)
+			if (j != i)
+				tmp += A[i + j*n] * A[i + j*n];
+	return sqrt(tmp);
+}
+
+void music(const int n, int *top, int *bot)
+{
+	int m = n/2;
+	int *ct = new int[m];
+	int *cb = new int[m];
+
+	for (int i=0; i<m; i++)
+	{
+		ct[i] = top[i]; cb[i] = bot[i];
+	}
+
+	for (int k=0; k<m; k++)
+	{
+		if (k==0)
+			top[0] = 0;
+		else if (k==1)
+			top[1] = cb[0];
+		else if (k>1)
+			top[k] = ct[k-1];
+		if (k==m-1)
+			bot[k] = ct[k];
+		else
+			bot[k] = cb[k+1];
+	}
+}
