@@ -2,9 +2,36 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
+#include <cassert>
 #include <cmath>
+#include <mkl.h>
+#include "Jacobi.hpp"
 
 using namespace std;
+
+void Gen_test_mat(int mode, double cond, const int n, double* D)
+{
+	assert( mode > 0 && mode < 6 );
+	cout << "mode = " << mode << endl;
+
+	assert( cond > 0 );
+	cout << "cond = " << cond << endl;
+
+	int irsign, idist;
+	int iseed[4];
+	int nn = n;
+	double* sv = new double[n];
+	int info;
+
+	iseed[0] = 2019; iseed[1] = 07; iseed[2] = 07; iseed[3] = 4094;
+	dlatm1( &mode, &cond, &irsign, &idist, iseed, sv, &nn, &info);
+
+	for (int i=0; i<n; i++)
+		cout << sv[i] << ", ";
+	cout << endl;
+
+	delete [] sv;
+}
 
 // Generate random matrix
 void Gen_mat(const int m, const int n, double *A)

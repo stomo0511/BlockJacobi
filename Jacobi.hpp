@@ -1,9 +1,11 @@
 #ifndef JACOBI_HPP_
 #define JACOBI_HPP_
 
-// Convergence criterion
-#define EPS 1.0E-12
+#include <limits>
+// Machine epsilon
+constexpr double e = std::numeric_limits<double>::epsilon();
 
+void Gen_test_mat(int mode, double cond, const int n, double* D);
 void Gen_mat(const int m, const int n, double *A);
 void Copy_mat(const int m, const int n, double *A, double *B);
 void Show_mat(const int m, const int n, double *A);
