@@ -1,8 +1,12 @@
+//
+// Blocked version of One sided Jacobi
+//
 #include <omp.h>
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
 #include <cmath>
+#include <limits>
 #include <mkl_cblas.h>
 #include "Jacobi.hpp"
 
@@ -26,7 +30,6 @@ int main(int argc, char **argv)
 	assert(w % 2 == 0);
 
 	double *G = new double[n*n];   // Original matrix
-
 	Gen_mat(n,n,G);
 	Show_mat(n,n,G);
 
@@ -46,8 +49,6 @@ int main(int argc, char **argv)
 		cout << endl;
 	}
 	cout << endl;
-
-
 
 	delete [] G;
 
