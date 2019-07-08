@@ -12,5 +12,6 @@ void Show_mat(const int m, const int n, double *A);
 void Set_Iden(const int n, double *A);
 double Off_d(const int n, double *A);
 void music(const int n, int *top, int *bot);
+bool modulus_pair(const int w, const int id, const int r, int &p, int &q);
 
 #endif /* JACOBI_HPP_ */

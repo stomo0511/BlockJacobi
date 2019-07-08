@@ -1,9 +1,9 @@
-#include <omp.h>
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
 #include <cassert>
 #include <cmath>
+#include <omp.h>
 #include <mkl.h>
 #include "Jacobi.hpp"
 
@@ -12,10 +12,10 @@ using namespace std;
 void Gen_test_mat(int mode, double cond, const int n, double* D)
 {
 	assert( mode > 0 && mode < 6 );
-	cout << "mode = " << mode << endl;
+//	cout << "mode = " << mode << endl;
 
 	assert( cond > 0 );
-	cout << "cond = " << cond << endl;
+//	cout << "cond = " << cond << endl;
 
 	int irsign, idist;
 	int iseed[4];
@@ -24,11 +24,12 @@ void Gen_test_mat(int mode, double cond, const int n, double* D)
 	int info;
 
 	iseed[0] = 2019; iseed[1] = 07; iseed[2] = 07; iseed[3] = 4094;
+
 	dlatm1( &mode, &cond, &irsign, &idist, iseed, sv, &nn, &info);
 
-	for (int i=0; i<n; i++)
-		cout << sv[i] << ", ";
-	cout << endl;
+//	for (int i=0; i<n; i++)
+//		cout << sv[i] << ", ";
+//	cout << endl;
 
 	delete [] sv;
 }
@@ -110,5 +111,22 @@ void music(const int n, int *top, int *bot)
 			bot[k] = ct[k];
 		else
 			bot[k] = cb[k+1];
+	}
+}
+
+bool modulus_pair(const int w, const int id, const int r, int &p, int &q)
+{
+	assert(r <= w);
+	assert(id <= w);
+
+	if (r < w - 2*id) {
+		p = id+r; q = w-id-1;
+		return false;
+	} else if (r == w - 2*id) {
+		p = id+r - w/2; q = id+r;
+		return true;
+	} else {
+		p = w/2 - id; q = id + r - w/2;
+		return false;
 	}
 }
