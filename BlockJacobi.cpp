@@ -1,3 +1,6 @@
+//
+// Blocked version of One sided Jacobi
+//
 #include <omp.h>
 #include <iostream>
 #include <cstdlib>
@@ -26,28 +29,26 @@ int main(int argc, char **argv)
 	assert(w % 2 == 0);
 
 	double *G = new double[n*n];   // Original matrix
-
-	Gen_mat(n,n,G);
-	Show_mat(n,n,G);
+//	Gen_mat(n,n,G);
+	Gen_test_mat( 3, 100000.0, n, G);
+//	Show_mat(n,n,G);
 
 	int p = 0;
 	int q = 2;
 
-	cout << noshowpos << "p = " << p << showpos << endl;
-	for (int i=0; i<n; i++) {
-		for (int j=0; j<nb; j++)
-			cout << G[i + (p*nb+j)*n] << ", ";
-		cout << endl;
-	}
-	cout << endl << noshowpos << "q = " << q << showpos << endl;
-	for (int i=0; i<n; i++) {
-		for (int j=0; j<nb; j++)
-			cout << G[i + (q*nb+j)*n] << ", ";
-		cout << endl;
-	}
-	cout << endl;
-
-
+//	cout << noshowpos << "p = " << p << showpos << endl;
+//	for (int i=0; i<n; i++) {
+//		for (int j=0; j<nb; j++)
+//			cout << G[i + (p*nb+j)*n] << ", ";
+//		cout << endl;
+//	}
+//	cout << endl << noshowpos << "q = " << q << showpos << endl;
+//	for (int i=0; i<n; i++) {
+//		for (int j=0; j<nb; j++)
+//			cout << G[i + (q*nb+j)*n] << ", ";
+//		cout << endl;
+//	}
+//	cout << endl;
 
 	delete [] G;
 
