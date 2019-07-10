@@ -9,13 +9,18 @@
 
 using namespace std;
 
+///
+/// @fn
+/// Generate test matrix
+/// @param (mode) mode (1 to 5)
+/// @param (cond) condition number
+/// @param (n)    size of square matrix
+/// @param (D)    pointer to the matrix
+///
 void Gen_test_mat(int mode, double cond, const int n, double* D)
 {
 	assert( mode > 0 && mode < 6 );
-//	cout << "mode = " << mode << endl;
-
-	assert( cond > 0 );
-//	cout << "cond = " << cond << endl;
+	assert( cond > 0.0 );
 
 	int irsign, idist;
 	int iseed[4];
@@ -30,6 +35,8 @@ void Gen_test_mat(int mode, double cond, const int n, double* D)
 //	for (int i=0; i<n; i++)
 //		cout << sv[i] << ", ";
 //	cout << endl;
+
+//  sv を対角要素に持つ対角行列Σを乱数で生成された直交行列 Q1, Q2 で D = Q1 Σ Q2 とする
 
 	delete [] sv;
 }

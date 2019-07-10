@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 
 	double *G = new double[n*n];   // Original matrix
 	Gen_mat(n,n,G);
-//	Gen_test_mat( 3, 100000.0, n, G);
+	Gen_test_mat( 3, 100001.0, n, G);
 //	Show_mat(n,n,G);
 
 //	cout << noshowpos << "p = " << p << showpos << endl;
@@ -53,43 +53,43 @@ int main(int argc, char **argv)
 	const int nb1 = CASHSIZE / n;
 	assert(CASHSIZE % n == 0);
 
-	#pragma omp parallel
-	{
-		const int nt = omp_get_num_threads();
-		const int id = omp_get_thread_num();
-		const int nb = n/nt;
-		assert(n % nt == 0);
-
-		int pp, qq;
-		bool flg;
-
-		for (int r=0; r<2*nt; r++)
-		{
-			flg = modulus_pair(2*nt,id,r,pp,qq);
-
-//			#pragma omp critical
-//			cout << "id = " << id << ": r = " << r << ", (pp,qq) = (" << pp << ", " << qq << ")\n";
-
-			if (flg == false)
-			{
-				for (int p2=nb*(pp-1); p2<nb*pp; p2+=nb1)
-					for (int q=nb*(qq-1); q<nb*qq; q++)
-						for (int p=p2; p<p2+nb1-1; p++)
-							cout << "(p,q) = (" << p << ", " << q << ")\n";
-			}
-			else
-			{
-				for (int p2=nb*(pp-1)+1; p2<nb*pp; p2+=nb1)
-					for (int q=p2+1; q<nb*pp; q++)
-						for (int p=p2; p<q; p++)
-							cout << "(p,q) = (" << p << ", " << q << ")\n";
-				for (int p2=nb*(pp-1)+1; p2<nb*qq; p2+=nb1)
-					for (int q=p2+1; q<nb*pp; q++)
-						for (int p=p2; p<q; p++)
-							cout << "(p,q) = (" << p << ", " << q << ")\n";
-			}
-		}
-	}
+//	#pragma omp parallel
+//	{
+//		const int nt = omp_get_num_threads();
+//		const int id = omp_get_thread_num();
+//		const int nb = n/nt;
+//		assert(n % nt == 0);
+//
+//		int pp, qq;
+//		bool flg;
+//
+//		for (int r=0; r<2*nt; r++)
+//		{
+//			flg = modulus_pair(2*nt,id,r,pp,qq);
+//
+////			#pragma omp critical
+////			cout << "id = " << id << ": r = " << r << ", (pp,qq) = (" << pp << ", " << qq << ")\n";
+//
+//			if (flg == false)
+//			{
+//				for (int p2=nb*(pp-1); p2<nb*pp; p2+=nb1)
+//					for (int q=nb*(qq-1); q<nb*qq; q++)
+//						for (int p=p2; p<p2+nb1-1; p++)
+//							cout << "(p,q) = (" << p << ", " << q << ")\n";
+//			}
+//			else
+//			{
+//				for (int p2=nb*(pp-1)+1; p2<nb*pp; p2+=nb1)
+//					for (int q=p2+1; q<nb*pp; q++)
+//						for (int p=p2; p<q; p++)
+//							cout << "(p,q) = (" << p << ", " << q << ")\n";
+//				for (int p2=nb*(pp-1)+1; p2<nb*qq; p2+=nb1)
+//					for (int q=p2+1; q<nb*pp; q++)
+//						for (int p=p2; p<q; p++)
+//							cout << "(p,q) = (" << p << ", " << q << ")\n";
+//			}
+//		}
+//	}
 
 
 	delete [] G;
