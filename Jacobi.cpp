@@ -14,35 +14,28 @@ using namespace std;
 /// Generate test matrix
 /// @param (mode) mode (1 to 5)
 /// @param (cond) condition number
+/// @param (dmax) maximum avs. value of singular values
 /// @param (n)    size of square matrix
 /// @param (D)    pointer to the matrix
 ///
-void Gen_test_mat(int mode, double cond, const int n, double* D)
+void Gen_test_mat(int mode, double cond, double dmax, const int n, double* A)
 {
 	assert( mode > 0 && mode < 6 );
 	assert( cond > 0.0 );
 
-	int irsign, idist;
 	int iseed[4];
-	int nn = n;
 	double* sv = new double[n];
-	int info;
 
-	iseed[0] = 2019; iseed[1] = 07; iseed[2] = 07; iseed[3] = 4094;
+	iseed[0] = 2019; iseed[1] = 07; iseed[2] = 07; iseed[3] = 4093;
 
-	dlatm1( &mode, &cond, &irsign, &idist, iseed, sv, &nn, &info);
-
-//	for (int i=0; i<n; i++)
-//		cout << sv[i] << ", ";
-//	cout << endl;
-
-//  sv を対角要素に持つ対角行列Σを乱数で生成された直交行列 Q1, Q2 で D = Q1 Σ Q2 とする
+	LAPACKE_dlatms ( LAPACK_COL_MAJOR, n, n, 'U', iseed, 'N',
+			sv, mode, cond, dmax, n-1, n-1, 'N', A, n);
 
 	delete [] sv;
 }
 
 // Generate random matrix
-void Gen_mat(const int m, const int n, double *A)
+void Gen_rand_mat(const int m, const int n, double *A)
 {
 	srand(20190611);
 
@@ -121,19 +114,19 @@ void music(const int n, int *top, int *bot)
 	}
 }
 
-bool modulus_pair(const int w, const int id, const int r, int &p, int &q)
+bool modulus_pair(const int w, const int i, const int r, int &p, int &q)
 {
 	assert(r <= w);
-	assert(id <= w);
+	assert(i <= w);
 
-	if (r < w - 2*id) {
-		p = id+r; q = w-id-1;
+	if (r+1 < w - 2*i) {   // r <- r+1
+		p = i+r; q = w-i-1;
 		return false;
-	} else if (r == w - 2*id) {
-		p = id+r - w/2; q = id+r;
+	} else if (r+1 == w - 2*i) {   // r <- r+1
+		p = i+r - w/2; q = i+r;
 		return true;
 	} else {
-		p = w/2 - id; q = id + r - w/2;
+		p = w/2 - i-1; q = i+r - w/2;   // w/2 -i <- w/2 -i-1
 		return false;
 	}
 }
